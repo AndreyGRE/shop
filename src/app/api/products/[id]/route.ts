@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-let products: any[] = []; // импортировать из общей логики или вынести в отдельный модуль
+const products: any[] = []; // импортировать из общей логики или вынести в отдельный модуль
 
 // Получение одного товара
 export async function GET(

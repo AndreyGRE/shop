@@ -1,12 +1,21 @@
 import React, { useEffect } from "react";
 import useCartStore from "@/components/store/useCartStore";
 import CartItem from "@/components/client/CartItem";
+import useAddressPrice from "@/components/store/Deliveru";
+import dynamic from "next/dynamic";
 
 export default function Modal({ isOpen, onClose }) {
     const { cart, clearCart } = useCartStore();
+    const { addressPrice } = useAddressPrice();
 
-    // Подсчёт общей суммы
-    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const total =
+        cart.reduce((sum, item) => sum + item.price * item.quantity, 0) +
+        (addressPrice?.[1]?.delivery_sum || 0);
+
+    const CdekWidget = dynamic(() => import("@/components/client/CdekWidget"), {
+        ssr: false, // ❌ отключает SSR
+    });
+
     useEffect(() => {
         const handleEsc = (e) => {
             if (e.key === "Escape") {
@@ -40,7 +49,10 @@ export default function Modal({ isOpen, onClose }) {
             <div className="relative w-full max-w-2xl md:max-w-4xl  bg-zinc-50 rounded-2xl shadow-xl md:p-6 p-2  mx-4 max-h-[90vh] overflow-y-auto flex flex-col">
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800">
-                    <h2 className="font-semibold text-3xl text-black">Корзина</h2>
+                    <h2 className="font-semibold text-3xl text-black">
+                        Корзина
+                    </h2>
+                
                     <button
                         className="text-black text-5xl hover:text-gray-700"
                         aria-label="Close cart"
@@ -50,7 +62,6 @@ export default function Modal({ isOpen, onClose }) {
                     </button>
                 </div>
 
-
                 <div className="flex flex-col md:flex-row">
                     <div className="flex-1">
                         {/* Cart Items */}
@@ -59,7 +70,9 @@ export default function Modal({ isOpen, onClose }) {
                             className="flex-1 overflow-y-auto divide-y divide-zinc-200 dark:divide-zinc-800 my-3"
                         >
                             {cart.length > 0 ? (
-                                cart.map((item) => <CartItem key={item.id} item={item} />)
+                                cart.map((item) => (
+                                    <CartItem key={item.id} item={item} />
+                                ))
                             ) : (
                                 <div className="text-center py-8 text-gray-500">
                                     В корзине пусто...
@@ -81,32 +94,40 @@ export default function Modal({ isOpen, onClose }) {
                         <div className="p-4 border-t border-zinc-200 dark:border-zinc-800 flex flex-col">
                             <div className="flex items-center justify-end mb-4 text-black gap-3 font-semibold">
                                 <span className="text-2xl">Итог:</span>
-                                <span className="text-teal-600 font-semibold text-2xl">
-                                    ₽ {total.toFixed(0)}
+                                <span
+                                    className={` font-semibold text-2xl ${
+                                        addressPrice.length < 1
+                                            ? "text-gray-400"
+                                            : "text-teal-600"
+                                    }`}
+                                >
+                                    ₽ {total.toFixed(0)}{" "}
+                                    {addressPrice.length < 1
+                                        ? "+ доставка"
+                                        : ""}
                                 </span>
                             </div>
-                            <button className="self-center  md:max-w-96 w-full py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-md font-medium tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-500 transition-transform duration-100 transform active:-translate-y-1">
+                            <button onClick={() => console.log(addressPrice)} className="self-center  md:max-w-96 w-full py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-md font-medium tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-500 transition-transform duration-100 transform active:-translate-y-1">
                                 Оформить заказ
                             </button>
                         </div>
                     </div>
 
-                    <div className="flex-1 bg-red-300">
-                 
+                    <div className="flex-1 ">
                         <div>
-                            сюда выбор города и места доставки
+                            <div className="text-black text-xl">
+                                Адрес доставки: {addressPrice[1]?.city}{" "}
+                                {addressPrice[2]?.address}{" "}
+                            </div>
+                            <div className="text-black text-xl">
+                                {" "}
+                                Тариф: {addressPrice[1]?.tariff_name}
+                            </div>
                         </div>
-                        <div>
-                            сюда выбранный город и цену
-                        </div>
-                        <div>
-                           сюда сдек карту
-                        </div>
+                        {/* <CdekWidget /> */}
                     </div>
                 </div>
-
-
-            </div>          
+            </div> 
         </div>
     );
 }

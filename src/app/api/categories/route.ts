@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
-import data from "@/app/api/data.json";
 
-// ⚠️ Тут важно, чтобы products был общий (лучше вынести в отдельный модуль storage.ts)
-let products = data
+import prisma from "@/lib/prisma";
 
 
 export async function GET() {
+  const products = await prisma.product.findMany();
   const categories = Array.from(new Set(products.map((p) => p.category)));
   return NextResponse.json(categories);
-}
+} 
 
-// GET /api/categories

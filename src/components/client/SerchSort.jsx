@@ -6,7 +6,6 @@ import useSearchProd from "@/components/store/useSearchProd";
 
 import useCartStore from "@/components/store/useCartStore";
 
-
 const SerchSort = () => {
     const cart = useCartStore((state) => state.cart);
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -20,19 +19,20 @@ const SerchSort = () => {
         text: "",
         categor: ["Все"],
     });
+    const [isClient, setIsClient] = useState(false);
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await fetch(
-                    "/api/categories",
-                    {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json;charset=utf-8",
-                        },
-                    }
-                );
+                const response = await fetch("/api/categories", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json;charset=utf-8",
+                    },
+                });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -51,49 +51,52 @@ const SerchSort = () => {
 
         const fetchData = async () => {
             try {
-            // Создаем параметры поиска
-            const searchParams = new URLSearchParams();
-            
-            if (serchData.text) {
-                searchParams.append("text", serchData.text);
-            }
-            
-            if (serchData.categor && serchData.categor.length > 0) {
-                searchParams.append("categor", JSON.stringify(serchData.categor));
-            }
+                // Создаем параметры поиска
+                const searchParams = new URLSearchParams();
 
-            const url = `/api/products?${searchParams.toString()}`;
+                if (serchData.text) {
+                    searchParams.append("text", serchData.text);
+                }
 
-            const response = await fetch(url, {
-                signal: controller.signal,
-                headers: { 
-                Accept: "application/json",
-                },
-            });
+                if (serchData.categor && serchData.categor.length > 0) {
+                    searchParams.append(
+                        "categor",
+                        JSON.stringify(serchData.categor)
+                    );
+                }
 
-            if (!response.ok) {
-                throw new Error(`Request failed with status ${response.status}`);
-            }
+                const url = `/api/products?${searchParams.toString()}`;
 
-            const data = await response.json();
-            setSearchProd(data);
-            
+                const response = await fetch(url, {
+                    signal: controller.signal,
+                    headers: {
+                        Accept: "application/json",
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error(
+                        `Request failed with status ${response.status}`
+                    );
+                }
+
+                const data = await response.json();
+                setSearchProd(data);
             } catch (error) {
-            if (error.name !== "AbortError") {
-                console.error("Fetch error:", error);
-                setSearchProd([]);
-            }
+                if (error.name !== "AbortError") {
+                    console.error("Fetch error:", error);
+                    setSearchProd([]);
+                }
             }
         };
 
         const timer = setTimeout(fetchData, 300);
-        
+
         return () => {
             controller.abort();
             clearTimeout(timer);
         };
     }, [serchData.text, serchData.categor]);
-  
 
     const toggleCategory = (categoryName) => {
         setSerchData((prev) => {
@@ -134,11 +137,7 @@ const SerchSort = () => {
             <div className="bg-white sticky top-0 z-100  dark:bg-zinc-100 ">
                 <div className=" flex p-2 md:p-4 items-center gap-1 md:gap-6 max-w-7xl mx-auto">
                     <div href="#" className="flex gap-2 cursor-pointer">
-                        <svg
-                            className="w-8"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                        >
+                        <svg className="w-8" viewBox="0 0 24 24" fill="none">
                             <circle
                                 cx="12"
                                 cy="12"
@@ -254,11 +253,11 @@ const SerchSort = () => {
                             />
                             {/* Счетчик */}
                         </svg>
-                            {totalItems > 0 && (
-                                <div className="absolute -top-1 -right-1 bg-teal-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
-                                    {displayCount}
-                                </div>
-                            )}
+                        {isClient && totalItems > 0 && (
+                            <div className="absolute -top-1 -right-1 bg-teal-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                                {displayCount}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

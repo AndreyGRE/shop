@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import data from "@/app/api/data.json";
 import { Product } from "@/types/product";
+import prisma from "@/lib/prisma";
+
 
 export async function GET(request: NextRequest) {
   try {
@@ -26,11 +27,12 @@ export async function GET(request: NextRequest) {
                                   !(categories.length === 1 && categories[0] === "Все");
 
     // Фильтрация
-    const filteredProducts = data.filter((product: Product) => {
+    const products = await prisma.product.findMany();
+    const filteredProducts = products.filter((product: Product) => {
       // Поиск по тексту
       const matchesText = !searchText || 
         product.name.toLowerCase().includes(searchText) ||
-        product.description?.toLowerCase().includes(searchText);
+        product.description?.toLowerCase().includes(searchText); 
 
       // Фильтр по категориям (если не выбрано "Все")
       const matchesCategory = !shouldFilterByCategory || 

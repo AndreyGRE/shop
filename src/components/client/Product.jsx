@@ -7,7 +7,7 @@ const Product = ({ product }) => {
     const updateQuantity = useCartStore((state) => state.updateQuantity);
     const cart = useCartStore((state) => state.cart);
 
-    console.log(product)
+    // console.log(product)
     const cartItem = cart.find((item) => item.id === product.id);
     return (
         <div
