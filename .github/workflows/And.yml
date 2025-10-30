@@ -97,12 +97,14 @@ jobs:
           git fetch origin master
           git reset --hard origin/master 
 
-          echo "🔧 Переустанавливаем проблемный пакет..."
-          rm -rf node_modules/lightningcss
-          npm install lightningcss --force
+          echo "🧹 ПОЛНАЯ очистка..."
+          rm -rf node_modules
+          rm -rf .next
+          rm -f package-lock.json
+          npm cache clean --force
 
-          echo "📦 Устанавливаем остальные зависимости..."
-          npm install
+          echo "📦 Чистая установка зависимостей..."
+          npm install --legacy-peer-deps
 
           echo "🔨 Собираем проект..."
           npx next build
