@@ -24,7 +24,14 @@ jobs:
     - name: 🔨 Build project
       run: npm run build
     
-    - name: 🚀 Sync with server
+    - name: 📁 Create deployment package
+      run: |
+        mkdir -p deployment
+        cp -r .next package.json package-lock.json next.config.ts public src prisma deployment/
+        echo "=== Files to deploy ==="
+        ls -la deployment/
+    
+    - name: 🚀 Clean server
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -32,16 +39,31 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           cd /var/www/html
-          
-          echo "🔄 Pulling latest changes..."
-          git fetch origin
-          git reset --hard origin/main
-          
-          echo "📦 Installing dependencies..."
-          npm ci
-          
-          echo "🔨 Building project..."
-          npm run build
+          echo "🧹 Cleaning old files..."
+          rm -rf .next
+          echo "=== After cleanup ==="
+          ls -la
+    
+    - name: 📤 Upload build files
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "deployment/*"
+        target: "/var/www/html"
+        strip_components: 1
+    
+    - name: 🎯 Final setup
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd /var/www/html
+          echo "📦 Installing production dependencies..."
+          npm ci --production
           
           echo "🔄 Restarting application..."
           pm2 restart next-app
@@ -49,4 +71,6 @@ jobs:
           echo "✅ Deploy completed!"
           echo "=== Verification ==="
           ls -la .next/BUILD_ID
+          stat .next/BUILD_ID
+          echo "=== PM2 Status ==="
           pm2 status
