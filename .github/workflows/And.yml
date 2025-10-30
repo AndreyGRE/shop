@@ -63,6 +63,32 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
+        # script: |
+        #   echo "🔗 Подключаемся к серверу..."
+        #   cd /var/www/html/shop
+
+        #   echo "📥 Получаем свежий код..."
+        #   git fetch origin master
+        #   git reset --hard origin/master 
+
+        #   echo "🧹 Очищаем node_modules и кэш..."
+        #   rm -rf node_modules
+        #   rm -rf .next
+        #   npm cache clean --force
+
+        #   echo "📦 Переустанавливаем зависимости..."
+        #   npm install
+
+        #   echo "🔨 Собираем проект..."
+        #   npx next build
+
+        #   echo "⚡ Настраиваем PM2..."
+        #   pm2 delete next-app 2>/dev/null || true
+        #   pm2 start npm --name "next-app" -- start
+        #   pm2 save 2>/dev/null
+
+        #   echo "✅ Деплой завершен!"
+        #   pm2 status
         script: |
           echo "🔗 Подключаемся к серверу..."
           cd /var/www/html/shop
@@ -71,12 +97,11 @@ jobs:
           git fetch origin master
           git reset --hard origin/master 
 
-          echo "🧹 Очищаем node_modules и кэш..."
-          rm -rf node_modules
-          rm -rf .next
-          npm cache clean --force
+          echo "🔧 Переустанавливаем проблемный пакет..."
+          rm -rf node_modules/lightningcss
+          npm install lightningcss --force
 
-          echo "📦 Переустанавливаем зависимости..."
+          echo "📦 Устанавливаем остальные зависимости..."
           npm install
 
           echo "🔨 Собираем проект..."
