@@ -1,4 +1,4 @@
-name: 🚀 Deploy ColorfullShop
+name: 🚀 Deploy to Production
 
 on:
   push:
@@ -24,24 +24,7 @@ jobs:
     - name: 🔨 Build project
       run: npm run build
     
-    - name: 📁 Create deployment package
-      run: |
-        mkdir -p deployment
-        # Копируем файлы для продакшена
-        cp -r .next package.json package-lock.json next.config.js* public deployment/
-        cp -r .env* deployment/ 2>/dev/null || true
-    
-    - name: 🚀 Deploy to server
-      uses: appleboy/scp-action@v0.1.4
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        source: "deployment/"
-        target: "/var/www/html"
-        strip_components: 1
-    
-    - name: 🎯 Setup and restart on server
+    - name: 🚀 Force Deploy and Restart
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -50,12 +33,24 @@ jobs:
         script: |
           cd /var/www/html
           
-          # Устанавливаем зависимости
-          npm ci --production
+          echo "🧹 Cleaning old build files..."
+          rm -rf .next
+          rm -f package.json package-lock.json
           
-          # Перезапускаем существующий процесс next-app (а не colorfullshop)
+          echo "📥 Pulling latest code..."
+          git fetch origin
+          git reset --hard origin/main
+          
+          echo "🔧 Installing dependencies..."
+          npm ci
+          
+          echo "🔨 Building project..."
+          npm run build
+          
+          echo "🔄 Restarting application..."
           pm2 restart next-app
           
-          echo "✅ Deploy completed successfully!"
-          echo "📊 Application status:"
+          echo "✅ Deploy completed!"
+          echo "=== Latest files ==="
+          ls -la .next/ | head -3
           pm2 status
