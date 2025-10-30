@@ -1,76 +1,39 @@
-name: 🚀 Deploy ColorfullShop
+name: 🚀 Deploy Next.js via SSH
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main ] # можно поменять на другую ветку, если хочешь
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: 📥 Checkout code
+    - name: 🧾 Checkout repository
       uses: actions/checkout@v4
-    
-    - name: ⚙️ Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-    
-    - name: 📦 Install dependencies
-      run: npm ci
-    
-    - name: 🔨 Build project
-      run: npm run build
-    
-    - name: 📁 Create deployment package
-      run: |
-        mkdir -p deployment
-        cp -r .next package.json package-lock.json next.config.ts public src prisma deployment/
-        echo "=== Files to deploy ==="
-        ls -la deployment/
-    
-    - name: 🚀 Clean server
+
+    - name: 🚀 Deploy to server via SSH
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
+          echo "🔗 Connecting to server..."
           cd /var/www/html
-          echo "🧹 Cleaning old files..."
-          rm -rf .next
-          echo "=== After cleanup ==="
-          ls -la
-    
-    - name: 📤 Upload build files
-      uses: appleboy/scp-action@v0.1.4
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        source: "deployment/*"
-        target: "/var/www/html"
-        strip_components: 1
-    
-    - name: 🎯 Final setup
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          cd /var/www/html
-          echo "📦 Installing production dependencies..."
-          npm ci --production
-          
-          echo "🔄 Restarting application..."
-          pm2 restart next-app
-          
-          echo "✅ Deploy completed!"
-          echo "=== Verification ==="
-          ls -la .next/BUILD_ID
-          stat .next/BUILD_ID
-          echo "=== PM2 Status ==="
+
+          echo "📥 Pulling latest code..."
+          git fetch origin main
+          git reset --hard origin/main
+
+          echo "📦 Installing dependencies..."
+          npm ci --omit=dev
+
+          echo "🔨 Building project..."
+          npm run build
+
+          echo "🔄 Restarting PM2 process..."
+          pm2 restart next-app || pm2 start npm --name "next-app" -- start
+
+          echo "✅ Deployment complete!"
           pm2 status
