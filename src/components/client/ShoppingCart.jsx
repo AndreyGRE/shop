@@ -40,6 +40,27 @@ export default function Modal({ isOpen, onClose }) {
 
     if (!isOpen) return null;
 
+    const handleCheckout = async () => {
+        const orderData = {
+            amount: total.toFixed(2),
+            comment: cart
+                .map((item) => `${item.name} x${item.quantity}`)
+                .join(", "),
+        };
+
+        const res = await fetch("/api/createPayment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(orderData),
+        });
+
+        const data = await res.json();
+        if (data.paymentUrl) {
+            // Перенаправляем пользователя на ЮMoney
+            window.location.href = data.paymentUrl;
+        }
+    };
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center ">
             <div
@@ -52,7 +73,7 @@ export default function Modal({ isOpen, onClose }) {
                     <h2 className="font-semibold text-3xl text-black">
                         Корзина
                     </h2>
-                
+
                     <button
                         className="text-black text-5xl hover:text-gray-700"
                         aria-label="Close cart"
@@ -107,7 +128,10 @@ export default function Modal({ isOpen, onClose }) {
                                         : ""}
                                 </span>
                             </div>
-                            <button onClick={() => console.log(addressPrice)} className="self-center  md:max-w-96 w-full py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-md font-medium tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-500 transition-transform duration-100 transform active:-translate-y-1">
+                            <button
+                                onClick={handleCheckout}
+                                className="self-center  md:max-w-96 w-full py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-md font-medium tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-500 transition-transform duration-100 transform active:-translate-y-1"
+                            >
                                 Оформить заказ
                             </button>
                         </div>
@@ -124,10 +148,10 @@ export default function Modal({ isOpen, onClose }) {
                                 Тариф: {addressPrice[1]?.tariff_name}
                             </div>
                         </div>
-                        {/* <CdekWidget /> */}
+                        <CdekWidget />
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
     );
 }

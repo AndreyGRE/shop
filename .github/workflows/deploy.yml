@@ -1,0 +1,60 @@
+name: 🚀 Deploy Next.js to Server
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+    
+    - name: ⚙️ Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: 📦 Install dependencies
+      run: npm ci
+    
+    - name: 🔨 Build project
+      run: npm run build
+    
+    - name: 📁 Create deployment package
+      run: |
+        mkdir -p deployment
+        cp -r .next package.json package-lock.json next.config.js public deployment/
+        # Копируем только нужные файлы для продакшена
+    
+    - name: 🚀 Deploy to server
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "deployment/"
+        target: "/var/www/html"
+        strip_components: 1
+    
+    - name: 🎯 Setup and start on server
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd /var/www/my-next-app
+          npm ci --production
+          
+          # Останавливаем предыдущий процесс если запущен
+          pm2 stop my-next-app || true
+          pm2 delete my-next-app || true
+          
+          # Запускаем приложение
+          pm2 start npm --name "my-next-app" -- start
+          pm2 save
+          pm2 startup

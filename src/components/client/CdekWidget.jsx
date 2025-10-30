@@ -17,13 +17,13 @@ function CdekWidget() {
                 // Код страны населенного пункта отправителя в формате ISO_3166-1_alpha-2
                 country_code: "RU",
                 // Название населенного пункта отправителя
-                city: "Новосибирск",
+                city: "Химки",
                 // Почтовый индекс населенного пункта отправителя
                 postal_code: "198207",
-                // Код населенного пункта CDEK
+                // Код населенного пункта CDEK 
                 code: 270,
                 // Адрес откуда произойдет отправка курьером в населеном пункте
-                address: "ул. Большевистская, д. 101",
+                address: "ул. 8 марта, д. 7",
             },
 
             // ID элемента, куда будет помещен виджет. В случае отсутствия - данный элемент будет создан на странице
@@ -39,7 +39,7 @@ function CdekWidget() {
 
             // Путь к php файлу для расчетов виджета. Берем отсюда https://github.com/cdek-it/widget/blob/main/dist/service.php?plain=1
             // Настройка тут: https://github.com/cdek-it/widget/wiki/%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-3.0
-            servicePath: "https://colorfullshop.ru/service.php",
+            servicePath: "https://devnewlk2.gwd.ru/service.php",
 
             // Управление сокрытием доступных пользователю фильтров
             hideFilters: {
