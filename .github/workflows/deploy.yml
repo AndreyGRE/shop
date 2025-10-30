@@ -41,7 +41,7 @@ jobs:
         target: "/var/www/html"
         strip_components: 1
     
-    - name: 🎯 Setup and start on server
+    - name: 🎯 Setup and restart on server
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -53,17 +53,9 @@ jobs:
           # Устанавливаем зависимости
           npm ci --production
           
-          # Устанавливаем PM2 если не установлен
-          if ! command -v pm2 &> /dev/null; then
-            npm install -g pm2
-          fi
-          
-          # Останавливаем предыдущий процесс
-          pm2 stop colorfullshop || true
-          pm2 delete colorfullshop || true
-          
-          # Запускаем Next.js приложение
-          pm2 start npm --name "colorfullshop" -- start
-          pm2 save
+          # Перезапускаем существующий процесс next-app (а не colorfullshop)
+          pm2 restart next-app
           
           echo "✅ Deploy completed successfully!"
+          echo "📊 Application status:"
+          pm2 status
