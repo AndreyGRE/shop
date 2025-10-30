@@ -20,7 +20,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           echo "🔗 Connecting to server..."
-          cd /var/www/html
+          cd /var/www/html/shop
 
           echo "📥 Pulling latest code..."
           git fetch origin main
