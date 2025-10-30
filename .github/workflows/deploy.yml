@@ -2,7 +2,7 @@ name: 🚀 Deploy ColorfullShop
 
 on:
   push:
-    branches: [ main ]
+    branches: [ es ]
 
 jobs:
   deploy:
