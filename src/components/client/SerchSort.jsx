@@ -218,7 +218,7 @@ const SerchSort = () => {
                         </div>
                         <input
                             className="text-black outline-none flex-1 text-xs md:text-lg"
-                            placeholder="Поиск по названию...++10+32"
+                            placeholder="Поиск по названию...++10+32 57"
                             value={serchData.text}
                             onChange={(e) => {
                                 toggleText(e.target.value);
