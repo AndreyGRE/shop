@@ -113,11 +113,25 @@ jobs:
 
           echo "🔨 Собираем проект..."
           npx next build
-           echo "⚡ Мое условие !!"
+
+          echo "⚡ Убиваем все предыдущие Next.js процессы..."
+          # Останавливаем PM2 процесс
+          pm2 delete next-app 2>/dev/null || true
+
+          # Убиваем все Next.js процессы
+          pkill -f next-server 2>/dev/null || true
+          pkill -f "npm start" 2>/dev/null || true
+
+          # Убиваем процессы на порту 3000
+          fuser -k 3000/tcp 2>/dev/null || true
+
+          # Ждем секунду чтобы процессы точно завершились
+          sleep 2
+
+          echo "⚡ Мое условие !!"
           npm start
 
           echo "⚡ Перезапуск PM2..."
-          pm2 delete next-app 2>/dev/null || true
           pm2 flush                   # очистка логов PM2
           pm2 start npm --name "next-app" -- start --cwd /var/www/html/shop
           pm2 save
