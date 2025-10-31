@@ -93,7 +93,7 @@ jobs:
           echo "🔗 Подключаемся к серверу..."
           cd /var/www/html/shop
 
-          # Разрешаем Git работать в этой директории
+          # Разрешаем git работать в этой директории
           git config --global --add safe.directory /var/www/html/shop
 
           echo "📥 Получаем свежий код..."
@@ -101,25 +101,22 @@ jobs:
           git reset --hard origin/master
 
           echo "🧹 ПОЛНАЯ очистка..."
-          rm -rf node_modules
-          rm -rf .next
-          rm -f package-lock.json
+          rm -rf node_modules .next package-lock.json
           npm cache clean --force
 
-          # Устанавливаем правильные права
-          sudo chown -R www-data:www-data /var/www/html/shop
+          # Устанавливаем правильные права (root владеет всем)
+          chown -R root:root /var/www/html/shop
 
           echo "📦 Чистая установка зависимостей..."
-          # Запускаем npm от www-data
-          sudo -u www-data npm install --legacy-peer-deps
+          npm install --legacy-peer-deps
 
           echo "🔨 Собираем проект..."
-          sudo -u www-data npx next build
+          npx next build
 
           echo "⚡ Настраиваем PM2..."
-          sudo -u www-data pm2 delete next-app 2>/dev/null || true
-          sudo -u www-data pm2 start npm --name "next-app" -- start --cwd /var/www/html/shop
-          sudo -u www-data pm2 save 2>/dev/null
+          pm2 delete next-app 2>/dev/null || true
+          pm2 start npm --name "next-app" -- start --cwd /var/www/html/shop
+          pm2 save 2>/dev/null
 
           echo "✅ Деплой завершен!"
-          sudo -u www-data pm2 status
+          pm2 status
