@@ -96,7 +96,7 @@ export default function Modal({ isOpen, onClose }) {
                                 ))
                             ) : (
                                 <div className="text-center py-8 text-gray-500">
-                                    В корзине пусто...!
+                                    В корзине пусто...
                                 </div>
                             )}
                         </div>

@@ -113,6 +113,8 @@ jobs:
 
           echo "🔨 Собираем проект..."
           npx next build
+           echo "⚡ Мое условие !!"
+          npm start
 
           echo "⚡ Перезапуск PM2..."
           pm2 delete next-app 2>/dev/null || true
