@@ -100,8 +100,9 @@ jobs:
           git fetch origin master
           git reset --hard origin/master
 
-          echo "🧹 ПОЛНАЯ очистка..."
+          echo "🧹 ПОЛНАЯ очистка старых сборок и кеша..."
           rm -rf node_modules .next package-lock.json
+          rm -rf .next/cache          # очистка кэша Next.js
           npm cache clean --force
 
           # Устанавливаем правильные права (root владеет всем)
@@ -113,10 +114,11 @@ jobs:
           echo "🔨 Собираем проект..."
           npx next build
 
-          echo "⚡ Настраиваем PM2..."
+          echo "⚡ Перезапуск PM2..."
           pm2 delete next-app 2>/dev/null || true
+          pm2 flush                   # очистка логов PM2
           pm2 start npm --name "next-app" -- start --cwd /var/www/html/shop
-          pm2 save 2>/dev/null
+          pm2 save
 
           echo "✅ Деплой завершен!"
           pm2 status
