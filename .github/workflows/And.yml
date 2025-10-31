@@ -103,6 +103,10 @@ jobs:
           rm -f package-lock.json
           npm cache clean --force
 
+          
+          sudo chown -R www-data:www-data /var/www/html/shop
+
+
           echo "📦 Чистая установка зависимостей..."
           npm install --legacy-peer-deps
 
