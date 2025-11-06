@@ -138,7 +138,7 @@ export default function AdminPage() {
                 />
                 <input
                     name="package"
-                    placeholder="Упаковка"
+                    placeholder="Упаковка размер ВxШxГ"
                     value={formData.package || ""}
                     onChange={handleChange}
                     className="bg-gray-700 border border-gray-600 p-2 rounded text-white placeholder-gray-400"
