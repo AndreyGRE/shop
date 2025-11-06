@@ -63,3 +63,56 @@ export async function GET(request: NextRequest) {
         );
     }
 }
+// POST — создание товара
+export async function POST(req: NextRequest) {
+    try {
+        const data = await req.json();
+        const newProduct = await prisma.product.create({ data });
+        return NextResponse.json(newProduct);
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ error: "Ошибка создания" }, { status: 500 });
+    }
+}
+
+// PUT — обновление товара
+export async function PUT(req: NextRequest) {
+    try {
+        const data = await req.json();
+        if (!data.id) {
+            return NextResponse.json(
+                { error: "Не указан ID" },
+                { status: 400 }
+            );
+        }
+        const updatedProduct = await prisma.product.update({
+            where: { id: data.id },
+            data,
+        });
+        return NextResponse.json(updatedProduct);
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json(
+            { error: "Ошибка обновления" },
+            { status: 500 }
+        );
+    }
+}
+
+// DELETE — удаление товара
+export async function DELETE(req: NextRequest) {
+    try {
+        const { id } = await req.json();
+        if (!id) {
+            return NextResponse.json(
+                { error: "Не указан ID" },
+                { status: 400 }
+            );
+        }
+        await prisma.product.delete({ where: { id } });
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ error: "Ошибка удаления" }, { status: 500 });
+    }
+}

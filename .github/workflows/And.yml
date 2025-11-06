@@ -1,49 +1,3 @@
-# name: 🚀 Deploy Next.js via SSH
-
-# on:
-#   push:
-#     branches: [ master, main ] 
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#     - name: 🧾 Checkout repository 
-#       uses: actions/checkout@v4
-
-#     - name: 🚀 Deploy to server via SSH
-#       uses: appleboy/ssh-action@v1.0.3
-#       with:
-#         host: ${{ secrets.SSH_HOST }}
-#         username: ${{ secrets.SSH_USERNAME }}
-#         key: ${{ secrets.SSH_PRIVATE_KEY }}
-#         script: |
-#           echo "🔗 Подключаемся к серверу..."
-#           cd /var/www/html/shop
-
-#           echo "📥 Получаем свежий код..."
-#           git fetch origin master
-#           git reset --hard origin/master 
-
-#           echo "📦 Устанавливаем зависимости....!"
-#           npm install
-
-#           echo "🔨 Собираем проект..."
-#           npm run build
-
-#           echo "⚡ Настраиваем PM2..."
-#           # Останавливаем приложение если оно запущено через npm start
-#           pkill -f "npm start" || true
-          
-#           # Запускаем через PM2
-#           pm2 delete next-app || true
-#           pm2 start npm --name "next-app" -- start
-#           pm2 save
-#           pm2 startup
-
-#           echo "✅ Деплой завершен!!"
-#           echo "📊 Статус приложения:"
-#           pm2 status
 name: 🚀 Deploy Next.js via SSH
 
 on:
@@ -63,32 +17,6 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        # script: |
-        #   echo "🔗 Подключаемся к серверу..."
-        #   cd /var/www/html/shop
-
-        #   echo "📥 Получаем свежий код..."
-        #   git fetch origin master
-        #   git reset --hard origin/master 
-
-        #   echo "🧹 Очищаем node_modules и кэш..."
-        #   rm -rf node_modules
-        #   rm -rf .next
-        #   npm cache clean --force
-
-        #   echo "📦 Переустанавливаем зависимости..."
-        #   npm install
-
-        #   echo "🔨 Собираем проект..."
-        #   npx next build
-
-        #   echo "⚡ Настраиваем PM2..."
-        #   pm2 delete next-app 2>/dev/null || true
-        #   pm2 start npm --name "next-app" -- start
-        #   pm2 save 2>/dev/null
-
-        #   echo "✅ Деплой завершен!"
-        #   pm2 status
         script: |
           echo "🔗 Подключаемся к серверу..."
           cd /var/www/html/shop
