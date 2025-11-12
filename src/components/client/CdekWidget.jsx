@@ -9,6 +9,9 @@ function CdekWidget() {
     const widget = useRef();
 
     useEffect(() => {
+         // Проверяем, доступен ли объект CDEKWidget
+        if (!window.CDEKWidget) return;
+
         // 2. Помещаем конструктор в current. Настраиваем конфигурацию
         widget.current = new window.CDEKWidget({
             // Адрес, от которого будет производиться отправка груза. Может содержать только город или адрес целиком
@@ -120,7 +123,14 @@ function CdekWidget() {
                 console.log("Данные сохранились:", [delivery, rate, address]);
             },
         });
-    }, []);
+         // Очистка при размонтировании
+        return () => {
+            if (widget.current && typeof widget.current.destroy === "function") {
+                widget.current.destroy(); // безопасно уничтожаем виджет
+                widget.current = null;
+            }
+        };
+    }, [setAddressPrice]);
     const openWidget = () => {
         if (widget.current) {
             widget.current.open(); // ✅ открываем модальное окно
