@@ -4,77 +4,39 @@ import React from "react";
 const Footer = () => {
     return (
         <footer className="bg-white dark:bg-zinc-100 border-t border-zinc-200 mt-10">
-            <div className="max-w-7xl mx-auto px-4 py-6 md:py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="max-w-7xl mx-auto px-4 py-6 md:py-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+
                 {/* Левая часть — логотип и название */}
-                <div className="flex items-center gap-2">
-                    <svg className="w-8" viewBox="0 0 24 24" fill="none">
-                        <circle
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="rgb(13 148 136)"
-                            strokeWidth="1.5"
-                        />
-                        <circle
-                            cx="12"
-                            cy="12"
-                            r="6"
-                            stroke="#1C274C"
-                            strokeWidth="1.5"
-                        />
-                        <circle
-                            cx="12"
-                            cy="12"
-                            r="2"
-                            stroke="#1C274C"
-                            strokeWidth="1.5"
-                        />
-                        <path
-                            d="M6 12L10 12"
-                            stroke="#1C274C"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                        />
-                        <path
-                            d="M14 12L18 12"
-                            stroke="#1C274C"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                        />
-                        <path
-                            d="M9 17.1963L11 13.7322"
-                            stroke="#1C274C"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                        />
-                        <path
-                            d="M13 10.2681L15 6.80396"
-                            stroke="#1C274C"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                        />
-                        <path
-                            d="M15 17.1963L13 13.7322"
-                            stroke="#1C274C"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                        />
-                        <path
-                            d="M11 10.2681L9 6.80396"
-                            stroke="#1C274C"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                        />
-                    </svg>
-                    <div className="text-xl md:text-2xl font-semibold text-black tracking-tight">
-                        DTL Store
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-8">
+                    <div className="flex items-center gap-2">
+                        <svg className="w-8" viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="10" stroke="rgb(13 148 136)" strokeWidth="1.5" />
+                            <circle cx="12" cy="12" r="6" stroke="#1C274C" strokeWidth="1.5" />
+                            <circle cx="12" cy="12" r="2" stroke="#1C274C" strokeWidth="1.5" />
+                            <path d="M6 12L10 12" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" />
+                            <path d="M14 12L18 12" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" />
+                            <path d="M9 17.1963L11 13.7322" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" />
+                            <path d="M13 10.2681L15 6.80396" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" />
+                            <path d="M15 17.1963L13 13.7322" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" />
+                            <path d="M11 10.2681L9 6.80396" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" />
+                        </svg>
+                        <div className="text-xl md:text-2xl font-semibold text-black tracking-tight">
+                            DTL Store
+                        </div>
+                    </div>
+
+                    {/* Карточка предприятия / реквизиты */}
+                    <div className="mt-2 md:mt-0 text-xs text-zinc-600">
+                        <p>И.П. Макарова В.В.</p>
+                        <p>ИНН: 502981178906, ОГРН: 325508100116951</p>
+                        <p>Адрес: 117997, г. Москва, ул. Вавилова, д.19</p>
+                        <p>Телефон: +7 (123) 456-78-90</p>
                     </div>
                 </div>
 
                 {/* Центральная часть — контакты */}
                 <div className="flex flex-col md:flex-row items-center gap-3 text-black">
-                    <div className="flex items-center gap-2">
-                        {/* <FaTelegramPlane className="text-teal-600 w-5 h-5" /> */}
+                    {/* <div className="flex items-center gap-2">
                         <a
                             href="https://t.me/DTLsupport"
                             target="_blank"
@@ -83,20 +45,24 @@ const Footer = () => {
                         >
                             @DTLsupport
                         </a>
-                    </div>
+                    </div> */}
 
-                    <div className="flex items-center gap-2">
-                        {/* <Mail className="w-5 h-5 text-teal-600" /> */}
+                    {/* <div className="flex items-center gap-2">
                         <a
                             href="mailto:support@dtlstore.com"
                             className="hover:underline hover:text-teal-600 transition"
                         >
                             support@dtlstore.com
                         </a>
-                    </div>
+                    </div> */}
 
                     <div className="flex items-center gap-2">
-                        <a target="blank" href="https://t.me/SAD_PUSSSY" className="flex items-center gap-2 hover:underline hover:text-teal-600 transition">
+                        <a
+                            target="_blank"
+                            href="https://t.me/SAD_PUSSSY"
+                            className="flex items-center gap-2 hover:underline hover:text-teal-600 transition"
+                        >
+                            Телеграмм:
                             <svg
                                 className="w-8 h-8"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -113,36 +79,19 @@ const Footer = () => {
                                     height="760"
                                     rx="380"
                                     stroke="url(#paint1_linear)"
-                                    stroke-width="27"
+                                    strokeWidth="27"
                                     width="760"
                                     x="157.5"
                                     y="159.5"
                                 />
                                 <defs>
-                                    <linearGradient
-                                        gradientUnits="userSpaceOnUse"
-                                        id="paint0_linear"
-                                        x1="468.5"
-                                        x2="710.864"
-                                        y1="286.5"
-                                        y2="883.047"
-                                    >
-                                        <stop
-                                            stop-color="#6BBFEC"
-                                            stop-opacity="0.7"
-                                        />
-                                        <stop offset="1" stop-color="#21A0E1" />
+                                    <linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear" x1="468.5" x2="710.864" y1="286.5" y2="883.047">
+                                        <stop stopColor="#6BBFEC" stopOpacity="0.7" />
+                                        <stop offset="1" stopColor="#21A0E1" />
                                     </linearGradient>
-                                    <linearGradient
-                                        gradientUnits="userSpaceOnUse"
-                                        id="paint1_linear"
-                                        x1="346"
-                                        x2="700.902"
-                                        y1="191"
-                                        y2="900.799"
-                                    >
-                                        <stop stop-color="#77C4ED" />
-                                        <stop offset="1" stop-color="#20A0E1" />
+                                    <linearGradient gradientUnits="userSpaceOnUse" id="paint1_linear" x1="346" x2="700.902" y1="191" y2="900.799">
+                                        <stop stopColor="#77C4ED" />
+                                        <stop offset="1" stopColor="#20A0E1" />
                                     </linearGradient>
                                 </defs>
                             </svg>
@@ -150,9 +99,16 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Правая часть — копирайт */}
-                <div className="text-xs md:text-sm text-zinc-500 text-center md:text-right">
-                    © {new Date().getFullYear()} DTL Store. Все права защищены.
+                {/* Правая часть — пользовательское соглашение и копирайт */}
+                <div className="flex flex-col items-center md:items-end text-xs md:text-sm text-zinc-500 gap-2 text-center md:text-right">
+                    <a
+                        target="_blank"
+                        href="/user_agreement"
+                        className="hover:underline hover:text-teal-600 transition"
+                    >
+                        Пользовательское соглашение
+                    </a>
+                    <div>© {new Date().getFullYear()} DTL Store. Все права защищены.</div>
                 </div>
             </div>
         </footer>
