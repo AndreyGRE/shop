@@ -3,8 +3,8 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
     const { amount, description } = await req.json();
 
-    const shopId = process.env.YOOKASSA_SHOP_ID;
-    const secretKey = process.env.YOOKASSA_SECRET_KEY;
+    const shopId = '1214393';
+    const secretKey ='test_KutfS3Hg_d2F_i9Xz-h_F2_D7ZzDoeYfZXiAAtpZHKY';
 
     const idempotenceKey = crypto.randomUUID();
 
@@ -15,7 +15,7 @@ export async function POST(req) {
             "Idempotence-Key": idempotenceKey,
             Authorization:
                 "Basic " +
-                Buffer.from(`1214393:test_KutfS3Hg_d2F_i9Xz-h_F2_D7ZzDoeYfZXiAAtpZHKY`).toString("base64"),
+                Buffer.from(`${shopId}:${secretKey}`).toString("base64"),
         },
         body: JSON.stringify({
             amount: {
@@ -25,7 +25,7 @@ export async function POST(req) {
             capture: true,
             confirmation: {
                 type: "redirect",
-                return_url: "https://your-domain.com/success", // ← URL возврата
+                return_url: "https://colorfullshop.ru", // ← URL возврата
             },
             description: description,
         }),
