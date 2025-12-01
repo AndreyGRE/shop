@@ -55,9 +55,9 @@ export default function Modal({ isOpen, onClose }) {
         });
 
         const data = await res.json();
-        if (data.paymentUrl) {
+        if (data.confirmationUrl) {
             // Перенаправляем пользователя на ЮMoney
-            window.location.href = data.paymentUrl;
+            window.location.href = data.confirmationUrl;
         }
     };
 
