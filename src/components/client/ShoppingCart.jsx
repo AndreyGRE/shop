@@ -155,7 +155,7 @@ export default function Modal({ isOpen, onClose }) {
                             {!addressPrice?.[1] && (
                                 <p className="text-red-500 text-sm mt-2 text-center">
                                     Пожалуйста, выберите способ доставки в
-                                    правой колонке
+                                    правой колонке!
                                 </p>
                             )}
                             <div className="text-black text-xl">
