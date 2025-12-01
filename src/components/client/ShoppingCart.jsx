@@ -41,6 +41,10 @@ export default function Modal({ isOpen, onClose }) {
     if (!isOpen) return null;
 
     const handleCheckout = async () => {
+        if (!addressPrice?.[1]) {
+            alert("Пожалуйста, выберите способ доставки.");
+            return;
+        }
         const orderData = {
             amount: total.toFixed(2),
             comment: cart
@@ -129,16 +133,31 @@ export default function Modal({ isOpen, onClose }) {
                                 </span>
                             </div>
                             <button
+                                disabled={addressPrice.length < 1}
                                 onClick={handleCheckout}
-                                className="self-center  md:max-w-96 w-full py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-md font-medium tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-500 transition-transform duration-100 transform active:-translate-y-1"
+                                className={`self-center md:max-w-96 w-full py-2 text-white rounded-md font-medium tracking-tight focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-500 transition-transform duration-100 transform active:-translate-y-1
+                                                ${
+                                                    addressPrice?.[1]
+                                                        ? "bg-teal-600 hover:bg-teal-700 cursor-pointer"
+                                                        : "bg-teal-600 cursor-not-allowed"
+                                                } 
+                                            `}
                             >
-                                Оформить заказ
+                                {addressPrice?.[1]
+                                    ? "Оформить заказ"
+                                    : "Выберите доставку"}
                             </button>
                         </div>
                     </div>
 
                     <div className="flex-1 ">
                         <div>
+                            {!addressPrice?.[1] && (
+                                <p className="text-red-500 text-sm mt-2 text-center">
+                                    Пожалуйста, выберите способ доставки в
+                                    правой колонке
+                                </p>
+                            )}
                             <div className="text-black text-xl">
                                 Адрес доставки: {addressPrice[1]?.city}{" "}
                                 {addressPrice[2]?.address}{" "}
