@@ -14,13 +14,12 @@ jobs:
     - name: 🚀 Deploy to server via SSH
       uses: appleboy/ssh-action@v1.0.3
       with:
-        YOOKASSA_SHOP_ID: ${{ secrets.YOOKASSA_SHOP_ID }}
-        YOOKASSA_SECRET_KEY: ${{ secrets.YOOKASSA_SECRET_KEY }}
-        YOOKASSA_SECRET_KEY_TEST: ${{ secrets.YOOKASSA_SECRET_KEY_TEST }}
-        
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+        envs: YOOKASSA_SHOP_ID,YOOKASSA_SECRET_KEY,YOOKASSA_SECRET_KEY_TEST  # ✅ Экспортируем в окружение
+
         script: |
           echo "🔗 Подключаемся к серверу..."
           cd /var/www/html/shop
@@ -44,6 +43,9 @@ jobs:
           npm install --legacy-peer-deps
 
           echo "🔨 Собираем проект..."
+           YOOKASSA_SHOP_ID=$YOOKASSA_SHOP_ID \
+            YOOKASSA_SECRET_KEY_TEST=$YOOKASSA_SECRET_KEY_TEST \
+            YOOKASSA_SECRET_KEY=$YOOKASSA_SECRET_KEY \
           npx next build 
          
           # Используем PM2 для управления процессом
