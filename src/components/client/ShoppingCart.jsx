@@ -58,9 +58,16 @@ export default function Modal({ isOpen, onClose }) {
             body: JSON.stringify(orderData),
         });
 
+        if (!res.ok) {
+            const text = await res.text();
+            console.error("Payment error:", res.status, text);
+            alert("Ошибка при создании платежа: " + res.status);
+            return;
+        }
+
         const data = await res.json();
+        console.log("Payment data:", data);
         if (data.confirmationUrl) {
-            // Перенаправляем пользователя на ЮMoney
             window.location.href = data.confirmationUrl;
         }
     };
