@@ -10,7 +10,6 @@ jobs:
     steps:
     - name: 🧾 Checkout repository 
       uses: actions/checkout@v4
-
     - name: 🚀 Deploy to server via SSH
       uses: appleboy/ssh-action@v1.0.3
       with:
