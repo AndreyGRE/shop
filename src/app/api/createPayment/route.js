@@ -3,8 +3,9 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
     const { amount, description } = await req.json();
 
-    const shopId = process.env.YOOKASSA_SHOP_ID;
-    const secretKey =process.env.YOOKASSA_SECRET_KEY_TEST;
+    // const shopId = process.env.YOOKASSA_SHOP_ID;
+    const shopId = secrets.YOOKASSA_SHOP_ID;
+    const secretKey = secrets.YOOKASSA_SECRET_KEY_TEST;
 
     const idempotenceKey = crypto.randomUUID();
 
