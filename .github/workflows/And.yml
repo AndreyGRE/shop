@@ -44,6 +44,13 @@ jobs:
          
           # Используем PM2 для управления процессом
           pm2 delete next-app 2>/dev/null || true
+
+          # Загружаем переменные и запускаем
+          export NODE_ENV=production
+          export YOOKASSA_SHOP_ID='${{ secrets.YOOKASSA_SHOP_ID }}'
+          export YOOKASSA_SECRET_KEY_TEST='${{ secrets.YOOKASSA_SECRET_KEY_TEST }}'
+
+
           pm2 start npm --name "next-app" -- start
           pm2 save
 
