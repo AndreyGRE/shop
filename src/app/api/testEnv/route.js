@@ -1,8 +1,10 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 
-export default function handler(req, res) {
-  res.status(200).json({
-    shopId: process.env.YOOKASSA_SHOP_ID || "undefined",
-    secretKey: process.env.YOOKASSA_SECRET_KEY_TEST ? "exists" : "undefined",
-  });
+export async function GET() {
+    return NextResponse.json({
+        shopId: process.env.YOOKASSA_SHOP_ID || "undefined",
+        secretKey: process.env.YOOKASSA_SECRET_KEY_TEST
+            ? "exists"
+            : "undefined",
+    });
 }

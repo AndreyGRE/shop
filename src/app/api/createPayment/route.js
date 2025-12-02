@@ -6,7 +6,6 @@ export async function POST(req) {
     const shopId = process.env.YOOKASSA_SHOP_ID;
     const secretKey = process.env.YOOKASSA_SECRET_KEY_TEST;
 
-
     const idempotenceKey = crypto.randomUUID();
 
     const response = await fetch("https://api.yookassa.ru/v3/payments", {
