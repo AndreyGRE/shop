@@ -67,9 +67,9 @@ export default function Modal({ isOpen, onClose }) {
 
         const data = await res.json();
         console.log("Payment data:", data);
-        if (data.confirmationUrl) {
-            window.location.href = data.confirmationUrl;
-        }
+        // if (data.confirmationUrl) {
+        //     window.location.href = data.confirmationUrl;
+        // }
     };
 
     return (

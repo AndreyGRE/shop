@@ -3,8 +3,10 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
     const { amount, description } = await req.json();
 
-    const shopId = process.env.YOOKASSA_SHOP_ID;
-    const secretKey = process.env.YOOKASSA_SECRET_KEY;
+    const shopId = process.env.YOOKASSA_SHOP_ID_TEST;
+    // const shopId = process.env.YOOKASSA_SHOP_ID;
+     const secretKey = process.env.YOOKASSA_SECRET_KEY_TEST;
+    // const secretKey = process.env.YOOKASSA_SECRET_KEY;
 
     const idempotenceKey = crypto.randomUUID();
 
@@ -28,13 +30,15 @@ export async function POST(req) {
                 return_url: "https://colorfullshop.ru", // ← URL возврата
             },
             description: description,
+            
         }),
     });
 
     const payment = await response.json();
 
     return NextResponse.json({
-        paymentId: payment.id,
+        payment: payment,
+        paymentId: payment.id, 
         confirmationUrl: payment.confirmation?.confirmation_url,
     });
 }
