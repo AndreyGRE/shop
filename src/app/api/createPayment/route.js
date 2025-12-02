@@ -3,9 +3,11 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
     const { amount, description } = await req.json();
 
-    // const shopId = process.env.YOOKASSA_SHOP_ID;
     const shopId = process.env.YOOKASSA_SHOP_ID;
     const secretKey = process.env.YOOKASSA_SECRET_KEY_TEST;
+
+    console.log("ShopId:", shopId );
+    console.log("SecretKey:", secretKey ? "exists" : "undefined");
 
     const idempotenceKey = crypto.randomUUID();
 
