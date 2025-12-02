@@ -4,7 +4,7 @@ export async function POST(req) {
     const { amount, description } = await req.json();
 
     const shopId = process.env.YOOKASSA_SHOP_ID;
-    const secretKey = process.env.YOOKASSA_SECRET_KEY_TEST;
+    const secretKey = process.env.YOOKASSA_SECRET_KEY;
 
     const idempotenceKey = crypto.randomUUID();
 
